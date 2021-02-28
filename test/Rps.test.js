@@ -305,18 +305,4 @@ describe('Rps game tests', () => {
     }
     assert(winner === '0x0000000000000000000000000000000000000000');
   }).timeout(20000);
-
-  // console.log('draw');
-  // if (results.draw === 0) {
-  //   // Check balance
-  //   assert(contractBalanceDifference === 0);
-  //   // Only gas difference
-  //   assert(
-  //     playerBalanceDifference >=
-  //       web3.utils.toWei('-0.1', 'gwei')
-  //   );
-  //   // Check host action
-  //   assert(hostLastAction === actions[0]);
-  // }
-  // results.draw += 1;
 });

@@ -11,7 +11,10 @@ rock paper scissors game that is on a public Ethereum testnet that can be used w
 # Start React application
 
 1. Ensure you have the on-chain smart contract address and ABI provided in "react-rps/.env". In the .env file, ABI and address of a contract has already been deployed to Ropsten test network is provided by default.
-2. In root directory, run `yarn run start`
+2. In root directory, run `yarn run start`.
+3. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+4. You should see the Lottery contract page displayed on the page and it is connected to a deployed on-chain smart contract (only on Ropsten Test Network) that you can create transaction (by placing an amount to enter the lottery).
+5. Whenever prompted to make connection with your Metamask plugin, make sure you allow it to establish connection to your account with the on-chain rps game.
 
 # Deployment of smart contract to Testnet procedures
 
