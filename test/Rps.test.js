@@ -22,17 +22,21 @@ const deployContract = async () => {
     .send({ from: accounts[0], gas: '3000000' });
 };
 
-const placeBeginningBankroll = async (amount = '1', unit = 'ether') => {
-  return await rps.methods.hostPlaceBankroll().send({
-    from: accounts[0],
+const placeBet = async (amount = '1', unit = 'ether') => {
+  return await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
+    from: accounts[1],
     value: web3.utils.toWei(amount, unit),
+    gas: 3000000,
   });
 };
 
 beforeEach(async () => {
   accounts = await web3.eth.getAccounts();
   rps = await deployContract();
-  await placeBeginningBankroll();
+  await rps.methods.hostPlaceBankroll().send({
+    from: accounts[0],
+    value: web3.utils.toWei('1', 'ether'),
+  });
 });
 
 describe('Helper functions and basic functions tests', () => {
@@ -188,19 +192,10 @@ describe('Rps game tests', () => {
     let win = false;
     let winner;
     while (win === false) {
-      // Get init balance before sending transaction
       const [initPlayerBalance, initContractBalance] = await getBalances(accounts, rps);
+      await placeBet('10', 'finney');
 
-      // 10 finney = 0.01 ether
-      await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
-        from: accounts[1],
-        value: web3.utils.toWei('10', 'finney'),
-        gas: 3000000,
-      });
-
-      // Get winner
       winner = await rps.methods.lastWinner().call();
-
       if (winner !== accounts[1]) {
         continue;
       }
@@ -211,13 +206,11 @@ describe('Rps game tests', () => {
 
       console.log('player bal diff', playerBalanceDifference);
       console.log('contract bal diff', contractBalanceDifference);
-      // Get host last action
-      hostLastAction = await rps.methods.hostLastAction().call();
-      // check balance
+
       assert(contractBalanceDifference === Number(web3.utils.toWei('-10', 'finney')));
       // Gas makes the gain slightly less than 10 finney
       assert(playerBalanceDifference >= Number(web3.utils.toWei('9.8', 'finney')));
-      // Check host action
+      hostLastAction = await rps.methods.hostLastAction().call();
       assert(hostLastAction === actions[2]);
       win = true;
     }
@@ -228,19 +221,10 @@ describe('Rps game tests', () => {
     let lose = false;
     let winner;
     while (lose === false) {
-      // Get init balance before sending transaction
       const [initPlayerBalance, initContractBalance] = await getBalances(accounts, rps);
+      await placeBet('10', 'finney');
 
-      // 10 finney = 0.01 ether
-      await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
-        from: accounts[1],
-        value: web3.utils.toWei('10', 'finney'),
-        gas: 3000000,
-      });
-
-      // Get winner
       winner = await rps.methods.lastWinner().call();
-
       if (winner !== accounts[0]) {
         continue;
       }
@@ -251,13 +235,11 @@ describe('Rps game tests', () => {
 
       console.log('player bal diff', playerBalanceDifference);
       console.log('contract bal diff', contractBalanceDifference);
-      // Get host last action
-      hostLastAction = await rps.methods.hostLastAction().call();
-      // check balance
+
       assert(contractBalanceDifference === Number(web3.utils.toWei('10', 'finney')));
       // Gas makes the loss slightly more than 10 finney
       assert(playerBalanceDifference >= web3.utils.toWei('-10.5', 'finney'));
-      // Check host action
+      hostLastAction = await rps.methods.hostLastAction().call();
       assert(hostLastAction === actions[1]);
       lose = true;
     }
@@ -268,19 +250,10 @@ describe('Rps game tests', () => {
     let draw = false;
     let winner;
     while (draw === false) {
-      // Get init balance before sending transaction
       const [initPlayerBalance, initContractBalance] = await getBalances(accounts, rps);
+      await placeBet('10', 'finney');
 
-      // 10 finney = 0.01 ether
-      await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
-        from: accounts[1],
-        value: web3.utils.toWei('10', 'finney'),
-        gas: 3000000,
-      });
-
-      // Get winner
       winner = await rps.methods.lastWinner().call();
-
       if (winner !== '0x0000000000000000000000000000000000000000') {
         continue;
       }
@@ -291,13 +264,11 @@ describe('Rps game tests', () => {
 
       console.log('player bal diff', playerBalanceDifference);
       console.log('contract bal diff', contractBalanceDifference);
-      // Get host last action
-      hostLastAction = await rps.methods.hostLastAction().call();
-      // check balance
+
       assert(contractBalanceDifference === 0);
       // Gas makes the loss slightly more than 10 finney
       assert(playerBalanceDifference >= web3.utils.toWei('-0.5', 'finney'));
-      // Check host action
+      hostLastAction = await rps.methods.hostLastAction().call();
       assert(hostLastAction === actions[0]);
       draw = true;
     }
