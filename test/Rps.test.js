@@ -25,6 +25,10 @@ const placeBeginningBankroll = async (unit = 'ether') => {
   });
 };
 
+const randomNumber = () => {
+  return Math.floor(Math.random() * 10000);
+};
+
 const getBalances = async () => {
   const playerBalance = Number(await web3.eth.getBalance(accounts[1]));
   const contractBalance = Number(await web3.eth.getBalance(rps.options.address));
@@ -119,13 +123,13 @@ describe('Helper functions and basic functions tests', () => {
 
 describe('Rps game tests', () => {
   it('Host is able to make RPS action', async () => {
-    const hostAction = await rps.methods.getHostAction().call();
+    const hostAction = await rps.methods.getHostAction(randomNumber()).call();
     assert(actions.includes(hostAction));
   });
 
   it('Player cannot play the game if he does not let host knows his action', async () => {
     try {
-      await rps.methods.playerPlaceBet().send({
+      await rps.methods.playerPlaceBet(randomNumber(), randomNumber()).send({
         from: accounts[1],
         value: web3.utils.toWei('1', 'gwei'),
       });
@@ -137,7 +141,7 @@ describe('Rps game tests', () => {
 
   it('Player cannot play the game if he provides invalid action', async () => {
     try {
-      await rps.methods.playerPlaceBet(web3.utils.keccak256('abc')).send({
+      await rps.methods.playerPlaceBet(web3.utils.keccak256('abc'), randomNumber()).send({
         from: accounts[1],
         value: web3.utils.toWei('1', 'gwei'),
       });
@@ -149,7 +153,7 @@ describe('Rps game tests', () => {
 
   it('Player cannot play the game without placing a positive bet', async () => {
     try {
-      await rps.methods.playerPlaceBet(actions[0]).send({
+      await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
         from: accounts[1],
         value: 0,
       });
@@ -161,7 +165,7 @@ describe('Rps game tests', () => {
 
   it('Player cannot play the game if his bet is fewer than 1 gwei', async () => {
     try {
-      await rps.methods.playerPlaceBet(actions[0]).send({
+      await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
         from: accounts[1],
         value: 1000,
       });
@@ -176,7 +180,7 @@ describe('Rps game tests', () => {
   // to pay to the player that won the rps game
   it('Player cannot play the game if his bet is more than half of the bankroll', async () => {
     try {
-      await rps.methods.playerPlaceBet(actions[0]).send({
+      await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
         from: accounts[1],
         value: web3.utils.toWei('0.6', 'ether'),
       });
@@ -194,7 +198,7 @@ describe('Rps game tests', () => {
       const [initPlayerBalance, initContractBalance] = await getBalances();
 
       // 10 finney = 0.01 ether
-      await rps.methods.playerPlaceBet(actions[0]).send({
+      await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
         from: accounts[1],
         value: web3.utils.toWei('10', 'finney'),
         gas: 3000000,
@@ -234,7 +238,7 @@ describe('Rps game tests', () => {
       const [initPlayerBalance, initContractBalance] = await getBalances();
 
       // 10 finney = 0.01 ether
-      await rps.methods.playerPlaceBet(actions[0]).send({
+      await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
         from: accounts[1],
         value: web3.utils.toWei('10', 'finney'),
         gas: 3000000,
@@ -274,7 +278,7 @@ describe('Rps game tests', () => {
       const [initPlayerBalance, initContractBalance] = await getBalances();
 
       // 10 finney = 0.01 ether
-      await rps.methods.playerPlaceBet(actions[0]).send({
+      await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
         from: accounts[1],
         value: web3.utils.toWei('10', 'finney'),
         gas: 3000000,
