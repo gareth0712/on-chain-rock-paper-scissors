@@ -33,8 +33,9 @@ contract Rps {
         require(playerActionHash == actions[0] || playerActionHash == actions[1] || playerActionHash == actions[2]);
         // Minimum amount of bet to play the game is 1 gwei
         require(msg.value >= 1000000000);
-        // Ensure that there are at least double of amount of bet placed by player in contract balance
-        require(this.balance - msg.value >= msg.value * 2);
+        // At this time, this.balance already added the player's bet
+        // Ensure that there are at least double of amount of bet in this.balance
+        require(this.balance >= msg.value * 2);
         pickWinner(playerActionHash, seed);
     }
 
