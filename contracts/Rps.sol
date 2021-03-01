@@ -2,7 +2,6 @@ pragma solidity ^0.4.17;
 
 contract Rps {
     address public host;
-    mapping (address => uint) playersBet;
     address public lastWinner;
     bytes32 public hostLastAction;
     bytes32[3] private actions;
@@ -25,38 +24,33 @@ contract Rps {
     }
 
     // Functions for the game    
-    function getHostAction() public view returns (bytes32) {
-        uint index = random() % actions.length;
+    function getHostAction(uint seed) public view returns (bytes32) {
+        uint index = random(seed) % actions.length;
         return actions[index];
     }
     
-    function playerPlaceBet(bytes32 playerActionHash) public payable {
+    function playerPlaceBet(bytes32 playerActionHash, uint seed) public payable {
         require(playerActionHash == actions[0] || playerActionHash == actions[1] || playerActionHash == actions[2]);
         // Minimum amount of bet to play the game is 1 gwei
         require(msg.value >= 1000000000);
         // Ensure that there are at least double of amount of bet placed by player in contract balance
         require(this.balance - msg.value >= msg.value * 2);
-        
-        playersBet[msg.sender] += msg.value;
-        pickWinner(playerActionHash);
+        pickWinner(playerActionHash, seed);
     }
 
-    function pickWinner(bytes32 playerActionHash) private {
-        hostLastAction = getHostAction();
+    function pickWinner(bytes32 playerActionHash, uint seed) private {
+        hostLastAction = getHostAction(seed);
         int result = actionsMatrix[hostLastAction][playerActionHash];
         
         if (result == 2) { // Player wins
-            msg.sender.transfer(playersBet[msg.sender] * 2);
-            playersBet[msg.sender] = 0;
+            msg.sender.transfer(msg.value * 2);
             lastWinner = msg.sender;
         }
         else if (result == 1) { // Host wins
-            playersBet[msg.sender] = 0;
             lastWinner = host;
         }
         else {
-            msg.sender.transfer(playersBet[msg.sender]);
-            playersBet[msg.sender] = 0;
+            msg.sender.transfer(msg.value);
             lastWinner = 0x0;
         }
     }
@@ -66,8 +60,8 @@ contract Rps {
         require(msg.value > 0);
     }
     
-    function random() private view returns (uint) {
-        return uint(keccak256(block.difficulty, now, this.balance));
+    function random(uint seed) private view returns (uint) {
+        return uint(keccak256(block.difficulty, now, seed));
     }
 
     function collectFromBalance(uint amount) public restricted {
