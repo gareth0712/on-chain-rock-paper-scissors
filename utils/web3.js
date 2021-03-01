@@ -6,7 +6,7 @@ module.exports = () => {
   let web3;
 
   if (process.env.NODE_ENV === 'test') {
-    web3 = new Web3(ganache.provider());
+    web3 = new Web3(ganache.provider({ default_balance_ether: 1000 }));
     return web3;
   } else if (process.env.NODE_ENV === 'development') {
     // First component is the mnemonic address
