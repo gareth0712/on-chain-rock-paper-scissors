@@ -15,9 +15,7 @@ const { web3, provider } = require('./utils/web3')();
   const contract = new web3.eth.Contract(JSON.parse(interface));
   let result;
 
-  if (process.env.CONTRACT === 'Rps') {
-    result = await contract.deploy({ data: bytecode }).send({ gas: '1000000', from: accounts[0] });
-  }
+  result = await contract.deploy({ data: bytecode }).send({ gas: '1000000', from: accounts[0] });
 
   // ABI for React to use
   console.log(interface);
