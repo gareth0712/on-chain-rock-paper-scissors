@@ -1,15 +1,19 @@
 const assert = require('assert');
-const ganache = require('ganache-cli');
-const Web3 = require('web3');
-const web3 = new Web3(ganache.provider());
 
+process.env.NODE_ENV = 'test';
+
+const web3 = require('../utils/web3')();
+// Utils
+const randomNumber = require('../utils/randomNumber');
+const actions = require('../utils/actions')(web3);
+const getBalances = require('../utils/getBalances')(web3);
+// Local copy of contract for testing
 const { interface, bytecode } = require('../compile')('Rps');
 
 let rps;
 let accounts;
-const actions = [web3.utils.keccak256('rock'), web3.utils.keccak256('paper'), web3.utils.keccak256('scissors')];
 
-// Helper functions
+// Helper functions purely for testing
 const deployContract = async () => {
   // Place a contract with accounts[0], so only accounts[0] can use restricted functions
   // like hostPlaceBankroll() and collectFromBalance
@@ -18,21 +22,11 @@ const deployContract = async () => {
     .send({ from: accounts[0], gas: '3000000' });
 };
 
-const placeBeginningBankroll = async (unit = 'ether') => {
+const placeBeginningBankroll = async (amount = '1', unit = 'ether') => {
   return await rps.methods.hostPlaceBankroll().send({
     from: accounts[0],
-    value: web3.utils.toWei('1', unit),
+    value: web3.utils.toWei(amount, unit),
   });
-};
-
-const randomNumber = () => {
-  return Math.floor(Math.random() * 10000);
-};
-
-const getBalances = async () => {
-  const playerBalance = Number(await web3.eth.getBalance(accounts[1]));
-  const contractBalance = Number(await web3.eth.getBalance(rps.options.address));
-  return [playerBalance, contractBalance];
 };
 
 beforeEach(async () => {
@@ -195,7 +189,7 @@ describe('Rps game tests', () => {
     let winner;
     while (win === false) {
       // Get init balance before sending transaction
-      const [initPlayerBalance, initContractBalance] = await getBalances();
+      const [initPlayerBalance, initContractBalance] = await getBalances(accounts, rps);
 
       // 10 finney = 0.01 ether
       await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
@@ -211,7 +205,7 @@ describe('Rps game tests', () => {
         continue;
       }
 
-      const [currentPlayerBalance, currentContractBalance] = await getBalances();
+      const [currentPlayerBalance, currentContractBalance] = await getBalances(accounts, rps);
       const playerBalanceDifference = currentPlayerBalance - initPlayerBalance;
       const contractBalanceDifference = currentContractBalance - initContractBalance;
 
@@ -235,7 +229,7 @@ describe('Rps game tests', () => {
     let winner;
     while (lose === false) {
       // Get init balance before sending transaction
-      const [initPlayerBalance, initContractBalance] = await getBalances();
+      const [initPlayerBalance, initContractBalance] = await getBalances(accounts, rps);
 
       // 10 finney = 0.01 ether
       await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
@@ -251,7 +245,7 @@ describe('Rps game tests', () => {
         continue;
       }
 
-      const [currentPlayerBalance, currentContractBalance] = await getBalances();
+      const [currentPlayerBalance, currentContractBalance] = await getBalances(accounts, rps);
       const playerBalanceDifference = currentPlayerBalance - initPlayerBalance;
       const contractBalanceDifference = currentContractBalance - initContractBalance;
 
@@ -275,7 +269,7 @@ describe('Rps game tests', () => {
     let winner;
     while (draw === false) {
       // Get init balance before sending transaction
-      const [initPlayerBalance, initContractBalance] = await getBalances();
+      const [initPlayerBalance, initContractBalance] = await getBalances(accounts, rps);
 
       // 10 finney = 0.01 ether
       await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
@@ -291,7 +285,7 @@ describe('Rps game tests', () => {
         continue;
       }
 
-      const [currentPlayerBalance, currentContractBalance] = await getBalances();
+      const [currentPlayerBalance, currentContractBalance] = await getBalances(accounts, rps);
       const playerBalanceDifference = currentPlayerBalance - initPlayerBalance;
       const contractBalanceDifference = currentContractBalance - initContractBalance;
 
