@@ -22,9 +22,9 @@ const deployContract = async () => {
     .send({ from: accounts[0], gas: '3000000' });
 };
 
-const placeBet = async (amount = '1', unit = 'ether') => {
+const placeBet = async (amount = '10', unit = 'finney', betAccount = accounts[1]) => {
   return await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
-    from: accounts[1],
+    from: betAccount,
     value: web3.utils.toWei(amount, unit),
     gas: 3000000,
   });
@@ -173,14 +173,12 @@ describe('Rps game tests', () => {
     }
   });
 
-  // player could get 2 times of his bet if he wins
-  // So if the bet is more than half of the bankroll, there is not sufficient amount in the bankroll
-  // to pay to the player that won the rps game
-  it('Player cannot play the game if his bet is more than half of the bankroll', async () => {
+  // The contract is not able to pay the player if the bet is more than the bankroll
+  it('Player cannot play the game if his bet is more the bankroll', async () => {
     try {
       await rps.methods.playerPlaceBet(actions[0], randomNumber()).send({
         from: accounts[1],
-        value: web3.utils.toWei('0.6', 'ether'),
+        value: web3.utils.toWei('1.1', 'ether'),
       });
       assert(false);
     } catch (err) {
