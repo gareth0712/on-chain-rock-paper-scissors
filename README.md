@@ -2,6 +2,14 @@
 
 rock paper scissors game that is on a public Ethereum testnet that can be used with Metamask
 
+# Terminologies
+
+I shall explain my terminologies and understand for gambling / rps game. If the follow differ from real world scenario, please let me know.
+
+1. Bankroll: Host's amount that is put into the contract for player's to win. Host cna withdraw his bankroll anytime.
+2. Bet: Players place their bet to enter the game and get 2 times the amount of bet if he/she wins. He/She gets nothing in return in case he loses
+3. RPS: Rock paper scissors rules -> Rock beats scissors; Paper beats rock; Scissors beat paper.
+
 # Install dependencies
 
 1. Run `yarn install` in the root directory
