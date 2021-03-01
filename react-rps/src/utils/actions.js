@@ -1,4 +1,4 @@
-import web3 from '../web3';
+import web3 from './web3';
 
 const rock = web3.utils.keccak256('rock');
 const paper = web3.utils.keccak256('paper');
