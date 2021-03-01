@@ -17,7 +17,7 @@ const Game = ({ gameMessage, setGameMessage, host, player, bankroll }) => {
     if (betInput !== '') {
       betInWei = web3.utils.toWei(betInput, 'gwei');
     }
-    if (playerAction !== '' && betInput !== '' && betInWei > 0 && betInWei * 2 <= bankroll) {
+    if (playerAction !== '' && betInput !== '' && betInWei > 0 && betInWei <= bankroll) {
       setGameMessage('Pending transaction to be completed...');
       await rps.methods.playerPlaceBet(web3.utils.keccak256(playerAction), randomNumber()).send({
         from: player,
@@ -37,7 +37,7 @@ const Game = ({ gameMessage, setGameMessage, host, player, bankroll }) => {
       }
     } else {
       setGameMessage(
-        'Bet amount of at least 1 Gwei and at most half of the bankroll will be accepted and please ensure you have selected an action in order to play the game!'
+        'Bet amount of at least 1 Gwei and at most same amount as the bankroll will be accepted and please ensure you have selected an action in order to play the game!'
       );
     }
   };
