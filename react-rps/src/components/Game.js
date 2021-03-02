@@ -55,7 +55,7 @@ const Game = ({ gameMessage, setGameMessage, host, player, bankroll }) => {
   return (
     <div>
       <form onSubmit={onPlayerSubmit}>
-        <h4>Want to try your luck?</h4>
+        <h2>Want to try your luck?</h2>
         <p>Your Address: {player}</p>
         <p>Your Balance: {web3.utils.fromWei(playerBalance, 'gwei')} Gwei</p>
         <div>
