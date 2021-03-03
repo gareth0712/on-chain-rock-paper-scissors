@@ -59,7 +59,6 @@ const Fomo = ({
   const showCountdown = () => {
     if (fomoEndTime === 0) return 'Fomo Timer is off';
     if (timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0) {
-      console.log('time is up?!');
       timesUp = true;
       return "Fomo timer's time is up!";
     }
