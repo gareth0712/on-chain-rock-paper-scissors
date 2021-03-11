@@ -1,12 +1,12 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import RpsForm from '../components/RpsForm';
+import RpsForm from './RpsForm';
 
 // Host is player2
-const host = "0x68b7535dc90C13054073cF05f0422B7758985341"
-const player1 = "0x21a0409e66bC90a8e77D5Fbc629Cad5A114E317e"
-const player2 = "0x68b7535dc90C13054073cF05f0422B7758985341"
+const host = '0x68b7535dc90C13054073cF05f0422B7758985341';
+const player1 = '0x21a0409e66bC90a8e77D5Fbc629Cad5A114E317e';
+const player2 = '0x68b7535dc90C13054073cF05f0422B7758985341';
 
 test('renders Heading in RpsForm', () => {
   render(<RpsForm />);
@@ -39,7 +39,7 @@ test('Button is enabled when it is hostOnly and player is a host', () => {
 });
 
 test('Display header as expected', () => {
-  const header = "Add Bankroll"
+  const header = 'Add Bankroll';
   render(<RpsForm header={header} />);
   const linkElement = screen.getByRole('heading');
   expect(linkElement).toContainHTML(`<h4>${header}</h4>`);

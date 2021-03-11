@@ -1,13 +1,14 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Message from '../components/Message';
+import Message from './Message';
 
-const fomoMessage = "Fomo Pool timer is over and currently pending fomo pool owner to collect the fomo rewards. Will resume the game upon user collected the rewards"
+const fomoMessage =
+  'Fomo Pool timer is over and currently pending fomo pool owner to collect the fomo rewards. Will resume the game upon user collected the rewards';
 
 beforeEach(() => {
   render(<Message message={fomoMessage} />);
-})
+});
 
 test('The heading component is visible', () => {
   const linkElement = screen.getByRole('heading');
@@ -16,7 +17,7 @@ test('The heading component is visible', () => {
 
 test('Render message in H2 header as expected', () => {
   const linkElement = screen.getByRole('heading');
-  expect(linkElement.tagName).toEqual('H2')
+  expect(linkElement.tagName).toEqual('H2');
 });
 
 test('Rendered message element is not empty', () => {
