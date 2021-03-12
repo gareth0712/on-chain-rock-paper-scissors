@@ -3,6 +3,7 @@ import web3 from '../utils/web3';
 import rps from '../utils/rps';
 import Message from './Message';
 import RpsForm from './RpsForm';
+import Container from './Container';
 
 const HostOperations = ({ bankroll, fomoBalance, hostOpsMessage, setHostOpsMessage, host, player }) => {
   const [bankrollInput, setBankrollInput] = useState('');
@@ -59,31 +60,36 @@ const HostOperations = ({ bankroll, fomoBalance, hostOpsMessage, setHostOpsMessa
   };
 
   return (
-    <div>
+    <Container>
       <h2>Host-only Operations</h2>
-      <RpsForm
-        onSubmit={onHostSubmitBankroll}
-        input={bankrollInput}
-        setInput={setBankrollInput}
-        hostOnly={true}
-        host={host}
-        player={player}
-        header="Add Bankroll"
-        label="Amount to add to bankroll "
-      />
-      <RpsForm
-        onSubmit={onHostSubmitWitdrawal}
-        input={withdrawalInput}
-        setInput={setWithdrawalInput}
-        hostOnly={true}
-        host={host}
-        player={player}
-        header="Collect Bankroll"
-        label="Amount to collect from bankroll "
-      />
-      <Message message={hostOpsMessage} />
-      <hr />
-    </div>
+      <div className="container">
+        <div className="row">
+          <RpsForm
+            className="col-md"
+            onSubmit={onHostSubmitBankroll}
+            input={bankrollInput}
+            setInput={setBankrollInput}
+            hostOnly={true}
+            host={host}
+            player={player}
+            header="Add Bankroll"
+            label="Amount to add to bankroll "
+          />
+          <RpsForm
+            className="col-md"
+            onSubmit={onHostSubmitWitdrawal}
+            input={withdrawalInput}
+            setInput={setWithdrawalInput}
+            hostOnly={true}
+            host={host}
+            player={player}
+            header="Collect Bankroll"
+            label="Amount to collect from bankroll "
+          />
+          <Message message={hostOpsMessage} />
+        </div>
+      </div>
+    </Container>
   );
 };
 

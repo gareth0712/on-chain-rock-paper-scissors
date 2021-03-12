@@ -1,5 +1,6 @@
 import React from 'react';
 import web3 from '../utils/web3';
+import Container from './Container';
 
 const Header = ({ host, bankroll, fomoBalance }) => {
   const renderBankrollText = () => {
@@ -22,12 +23,11 @@ const Header = ({ host, bankroll, fomoBalance }) => {
   };
 
   return (
-    <div>
+    <Container>
       <h2>Rock Paper Scissors Game</h2>
       <p>This contract is hosted by {host}.</p>
       {renderBankrollText()}
-      <hr />
-    </div>
+    </Container>
   );
 };
 

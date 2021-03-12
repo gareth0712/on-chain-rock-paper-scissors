@@ -3,6 +3,7 @@ import web3 from '../utils/web3';
 import rps from '../utils/rps';
 import calculateTimeLeft from '../utils/calculateTimeLeft';
 import Message from './Message';
+import Container from './Container';
 
 const Fomo = ({
   player,
@@ -95,15 +96,14 @@ const Fomo = ({
   });
 
   return (
-    <div>
+    <Container>
       <h2>Fomo Pool</h2>
       <p>Fomo Pool Timer status: {fomoTimerOn ? 'On' : 'Off'}</p>
       <p>Fomo Pool remaining time: {showCountdown()}</p>
       <p>Fomo Pool Owner: {showTimerOwner()}</p>
       <p>Fomo Pool Balance: {web3.utils.fromWei(String(fomoBalance), 'gwei')} Gwei</p>
       <Message message={fomoMessage} />
-      <hr />
-    </div>
+    </Container>
   );
 };
 

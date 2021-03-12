@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import rps from '../utils/rps';
 import actions from '../utils/actions';
 import randomNumber from '../utils/randomNumber';
+import Container from './Container';
 
 const Verify = () => {
   const [hostAction, setHostAction] = useState('');
@@ -13,7 +14,7 @@ const Verify = () => {
   };
 
   return (
-    <div>
+    <Container>
       <h2>Verify the Game</h2>
       <p>
         This game is provably fair. It means that you can verify that the host did not have any advantage over her in
@@ -28,10 +29,11 @@ const Verify = () => {
         The function of getting host's action is always available for players to verify. Click the verify button below
         to see what action the host will place.
       </p>
-      <button onClick={onVerify}>Verify</button>
+      <button className="btn btn-primary" onClick={onVerify}>
+        Verify
+      </button>
       <h4>{hostAction}</h4>
-      <hr />
-    </div>
+    </Container>
   );
 };
 
