@@ -3,9 +3,12 @@ const styleContainer = {
   'margin-bottom': '5px',
 };
 
-const Container = ({ children }) => {
+const Container = ({ haveBorder = true, children }) => {
+  let className = 'container';
+  className += haveBorder ? ' border' : '';
+
   return (
-    <div style={styleContainer} className="container border rounded">
+    <div style={styleContainer} className={className}>
       {children}
     </div>
   );
