@@ -1,11 +1,14 @@
+import Container from './Container';
+
 const RpsForm = ({ onSubmit, input, setInput, hostOnly, host, player, header, label }) => {
   return (
-    <div>
+    <Container>
       <form onSubmit={onSubmit}>
         <h4>{header}</h4>
-        <div>
-          <label>{label}</label>
+        <div className="mb-3">
+          <label className="form-label">{label}</label>
           <input
+            className="form-control"
             disabled={hostOnly ? host !== player : false}
             value={input}
             onChange={(event) => setInput(event.target.value.replace(/\D/, ''))}
@@ -14,7 +17,7 @@ const RpsForm = ({ onSubmit, input, setInput, hostOnly, host, player, header, la
         </div>
         <button disabled={hostOnly ? host !== player : false}>{header}</button>
       </form>
-    </div>
+    </Container>
   );
 };
 
